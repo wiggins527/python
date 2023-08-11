@@ -1,0 +1,45 @@
+import pytest
+from account import Account
+
+def test_init():
+    acc = Account('John')
+    assert acc.get_name() == 'John'
+    assert acc.get_balance() == 0
+
+def test_deposit():
+    acc = Account('Alice')
+    
+    # Test depositing a negative amount
+    assert not acc.deposit(-100)
+    assert acc.get_balance() == 0
+    
+    # Test depositing $0
+    assert not acc.deposit(0)
+    assert acc.get_balance() == 0
+    
+    # Test depositing a positive amount
+    assert acc.deposit(500)
+    assert acc.get_balance() == 500
+
+def test_withdraw():
+    acc = Account('Bob')
+    acc.deposit(1000)
+    
+    # Test withdrawing a negative amount
+    assert not acc.withdraw(-100)
+    assert acc.get_balance() == 1000
+    
+    # Test withdrawing $0
+    assert not acc.withdraw(0)
+    assert acc.get_balance() == 1000
+    
+    # Test withdrawing a positive amount above the account balance
+    assert not acc.withdraw(1500)
+    assert acc.get_balance() == 1000
+    
+    # Test withdrawing a positive amount below the account balance
+    assert acc.withdraw(500)
+    assert acc.get_balance() == 500
+
+if __name__ == '__main__':
+    pytest.main()
